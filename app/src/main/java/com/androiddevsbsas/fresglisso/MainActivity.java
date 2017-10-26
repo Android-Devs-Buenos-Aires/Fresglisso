@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.androiddevsbsas.fresglisso.glide.GlideApp;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.squareup.picasso.Picasso;
 
@@ -62,7 +64,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadGlideSample() {
-        Glide.with(MainActivity.this).load(atendedorUrl).into(glideSample);
+        GlideApp.with(MainActivity.this)
+                .load(this.atendedorUrl)
+                //PlaceHolders
+                .placeholder(R.mipmap.ic_launcher_round)
+                .error(R.mipmap.error)
+                .fallback(R.mipmap.info)
+                //Transformations
+                .circleCrop()
+                //Transitions
+                .transition(new DrawableTransitionOptions().crossFade())
+                .into(this.glideSample);
     }
 
     private void loadFrescoSample() {
