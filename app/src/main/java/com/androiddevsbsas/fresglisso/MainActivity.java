@@ -1,17 +1,16 @@
 package com.androiddevsbsas.fresglisso;
 
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.androiddevsbsas.fresglisso.glide.GlideApp;
-import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
 import com.facebook.drawee.drawable.ProgressBarDrawable;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
@@ -38,6 +37,23 @@ public class MainActivity extends AppCompatActivity {
         glideSample = findViewById(R.id.glide_sample);
         imageFresco = findViewById(R.id.fresco_sample);
 
+        this.bindListeners();
+
+        if (loadAtInit) {
+            loadPicassoSample();
+            loadFrescoSample();
+            loadGlideSample();
+        }
+    }
+
+    private void bindListeners() {
+        findViewById(R.id.button_clear_cache).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearCache();
+            }
+        });
+
         findViewById(R.id.glide).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,12 +74,40 @@ public class MainActivity extends AppCompatActivity {
                 loadPicassoSample();
             }
         });
+    }
 
-        if (loadAtInit) {
-            loadPicassoSample();
-            loadFrescoSample();
-            loadGlideSample();
-        }
+    private void clearCache() {
+        this.clearCachePicasso();
+        this.clearCacheFresco();
+        this.clearCacheGlide();
+    }
+
+    private void clearCacheGlide() {
+        //Cambios de tamaño temporales.
+//        GlideApp.get(this).setMemoryCategory(MemoryCategory.HIGH);
+//        GlideApp.get(this).setMemoryCategory(MemoryCategory.NORMAL);
+
+        //Limpio imagen
+        GlideApp.with(this).clear(this.glideSample);
+
+        //Limpio Memory Cache
+        GlideApp.get(this).clearMemory();
+
+        //Limpio Disk Cache:
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                // This method must be called on a background thread.
+                GlideApp.get(MainActivity.this).clearDiskCache();
+                return null;
+            }
+        }.execute();
+    }
+
+    private void clearCacheFresco() {
+    }
+
+    private void clearCachePicasso() {
     }
 
     private void loadPicassoSample() {

@@ -41,6 +41,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -71,5 +72,14 @@
             android:text="@string/fresco" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button_clear_cache"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:text="Limpiar Caché" />
 
 </RelativeLayout>
