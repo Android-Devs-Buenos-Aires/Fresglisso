@@ -7,7 +7,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.androiddevsbsas.fresglisso.glide.GlideApp;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.facebook.drawee.drawable.ProgressBarDrawable;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
@@ -73,8 +77,12 @@ public class MainActivity extends AppCompatActivity {
                 .placeholder(R.mipmap.ic_launcher_round)
                 .error(R.mipmap.error)
                 .fallback(R.mipmap.info)
-                //Transformations
-                .circleCrop()
+                //Simple Transformations
+//                .apply(RequestOptions.circleCropTransform())
+//                .circleCrop()
+                //Multiple Transformations
+//                .transform(new MultiTransformation(new CircleCrop(), new FitCenter()))
+                .transforms(new FitCenter(), new CircleCrop())
                 //Transitions
                 .transition(new DrawableTransitionOptions().crossFade())
                 .into(this.glideSample);
