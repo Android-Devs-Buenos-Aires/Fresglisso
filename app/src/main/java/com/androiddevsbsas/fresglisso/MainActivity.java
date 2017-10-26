@@ -1,5 +1,6 @@
 package com.androiddevsbsas.fresglisso;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,11 +12,15 @@ import com.androiddevsbsas.fresglisso.glide.GlideApp;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.drawable.ProgressBarDrawable;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.core.ImagePipeline;
 import com.squareup.picasso.Picasso;
+
+import java.lang.ref.WeakReference;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -94,17 +99,17 @@ public class MainActivity extends AppCompatActivity {
         GlideApp.get(this).clearMemory();
 
         //Limpio Disk Cache:
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                // This method must be called on a background thread.
-                GlideApp.get(MainActivity.this).clearDiskCache();
-                return null;
-            }
-        }.execute();
+        new CleanGlideCache(this).execute();
     }
 
     private void clearCacheFresco() {
+        ImagePipeline imagePipeline = Fresco.getImagePipeline();
+        imagePipeline.clearMemoryCaches();
+        imagePipeline.clearDiskCaches();
+        // Se puede llamar este metodo solo en vez de los dos anteriores
+        //imagePipeline.clearCaches();
+        
+        imageFresco.getHierarchy().reset();
     }
 
     private void clearCachePicasso() {
@@ -145,5 +150,22 @@ public class MainActivity extends AppCompatActivity {
         hierarchy.setPlaceholderImage(R.mipmap.ic_launcher_round);
         hierarchy.setFailureImage(R.mipmap.error);
         return hierarchy;
+    }
+
+    public static class CleanGlideCache extends AsyncTask<Void, Void, Void> {
+
+        private WeakReference<Context> context;
+
+        CleanGlideCache(Context context) {
+            this.context = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (context.get() != null) {
+                GlideApp.get(context.get()).clearDiskCache();
+            }
+            return null;
+        }
     }
 }
