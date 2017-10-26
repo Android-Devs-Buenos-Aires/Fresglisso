@@ -35,7 +35,7 @@
             android:layout_width="@dimen/size_image"
             android:layout_height="@dimen/size_image"
             fresco:actualImageScaleType="centerCrop"
-            fresco:placeholderImage="@mipmap/ic_launcher"
+            fresco:placeholderImage="@mipmap/ic_launcher_round"
             fresco:placeholderImageScaleType="centerCrop" />
 
     </LinearLayout>

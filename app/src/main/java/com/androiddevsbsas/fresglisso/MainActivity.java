@@ -7,8 +7,10 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.androiddevsbsas.fresglisso.glide.GlideApp;
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.facebook.drawee.drawable.ProgressBarDrawable;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.squareup.picasso.Picasso;
 
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private String fortUrl = "https://i.imgur.com/rAvezp2.jpg";
     private String atendedorUrl = "https://media.giphy.com/media/3o7aCU7plfW5Z4Foxa/giphy.gif";
     private String webpUrl = "http://demos.mattwest.io/webp-demo-images/result.webp";
+    private String hdImageUrl = "https://images8.alphacoders.com/411/411509.jpg";
     private ImageView glideSample, picassoSample;
     private SimpleDraweeView imageFresco;
     private Boolean loadAtInit = false;
@@ -78,6 +81,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadFrescoSample() {
-        imageFresco.setImageURI(Uri.parse(fortUrl));
+        // Show a progress bar for huge images
+        imageFresco.setHierarchy(initHierarchy());
+        imageFresco.setImageURI(Uri.parse(hdImageUrl));
+    }
+
+    private GenericDraweeHierarchy initHierarchy() {
+        GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(getResources());
+        GenericDraweeHierarchy hierarchy = builder.setFadeDuration(500).build();
+        hierarchy.setProgressBarImage(new ProgressBarDrawable());
+        hierarchy.setPlaceholderImage(R.mipmap.ic_launcher_round);
+        hierarchy.setFailureImage(R.mipmap.error);
+        return hierarchy;
     }
 }
