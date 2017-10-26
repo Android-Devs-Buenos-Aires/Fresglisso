@@ -108,11 +108,13 @@ public class MainActivity extends AppCompatActivity {
         imagePipeline.clearDiskCaches();
         // Se puede llamar este metodo solo en vez de los dos anteriores
         //imagePipeline.clearCaches();
-        
+
         imageFresco.getHierarchy().reset();
     }
 
     private void clearCachePicasso() {
+        Picasso.with(this).invalidate(troyUrl);
+        picassoSample.setImageResource(R.mipmap.ic_launcher);
     }
 
     private void loadPicassoSample() {
